@@ -1,26 +1,38 @@
 <resources>
     <string name="app_name">Quiz App</string>
-    <string name="title">Hello and welcome to Quiz!</string>
-    <string name="anonymous">Anonymous</string>
-    <string name="question0text">0. What is you name?</string>
-    <string name="question1text">1.  What view shows a list of dropdown options?</string>
-    <string name="question1Answer1Text">Spinner</string>
-    <string name="question1Answer2Text">EditText</string>
-    <string name="question1Answer3Text">RatingBar</string>
-    <string name="question2text">2. What view is it: </string>
-    <string name="question2Answer1Text">RatingBar</string>
-    <string name="question2Answer2Text">Switch</string>
-    <string name="question2Answer3Text">CheckBox</string>
-    <string name="question3text">3. What view/views can be checked?</string>
-    <string name="question3Answer1Text">RadioButton</string>
-    <string name="question3Answer2Text">CheckBox</string>
-    <string name="question3Answer3Text">ImageView</string>
-    <string name="question3Answer4Text">ToggleButton</string>
-    <string name="question4text">4. What view is it? -> </string>
-    <string name="question4Hint">Type, please</string>
-    <string name="question5text">5. Check ProgressBar</string>
+    <string name="title_text">Hello and welcome to Quiz!</string>
+    <string name="name_text">Anonymous</string>
+    <string name="question_0_text">0. What is you name?</string>
+    <string name="question_1_text">1.  What view shows a list of dropdown options?</string>
+    <string name="question_1_answer1_text">Spinner</string>
+    <string name="question_1_answer_2_text">EditText</string>
+    <string name="question_1_answer_3_text">RatingBar</string>
+    <string name="question_2_text">2. What view is it -> </string>
+    <string name="question_2_answer_1_text">RatingBar</string>
+    <string name="question_2_answer_2_text">CheckBox</string>
+    <string name="question_2_answer_3_text">Switch</string>
+    <string name="question_3_text">3. What view/views can be checked?</string>
+    <string name="question_3_answer_1_text">RadioButton</string>
+    <string name="question_3_answer_2_text">CheckBox</string>
+    <string name="question_3_answer_3_text">ImageView</string>
+    <string name="question_3_answer_4_text">ToggleButton</string>
+    <string name="question_4_text">4. What view is it? -> </string>
+    <string name="question_4_hint">Type, please</string>
+    <string name="question_5_text">5. Check ProgressBar</string>
     <string name="ok">OK</string>
     <string name="done">DONE!</string>
+    <string name="img_question_5_answer_4_description">Example image for question 5 answer 4</string>
+
+    <string name="question_1_answer_type">single</string>
+    <string name="question_1_correct_answer">1</string>
+    <string name="question_2_answer_type">single</string>
+    <string name="question_2_correct_answer">3</string>
+    <string name="question_3_answer_type">multiple</string>
+    <string name="question_3_correct_answer">1,2,4</string>
+    <string name="question_4_answer_type">text</string>
+    <string name="question_4_correct_answer">RatingBar</string>
+    <string name="question_5_answer_type">multiple</string>
+    <string name="question_5_correct_answer">1,2,4</string>
 
 
 </resources>
