@@ -21,18 +21,6 @@
     <string name="question_5_text">5. Check ProgressBar</string>
     <string name="ok">OK</string>
     <string name="done">DONE!</string>
-    <string name="img_question_5_answer_4_description">Example image for question 5 answer 4</string>
-
-    <string name="question_1_answer_type">single</string>
-    <string name="question_1_correct_answer">1</string>
-    <string name="question_2_answer_type">single</string>
-    <string name="question_2_correct_answer">3</string>
-    <string name="question_3_answer_type">multiple</string>
-    <string name="question_3_correct_answer">1,2,4</string>
-    <string name="question_4_answer_type">text</string>
-    <string name="question_4_correct_answer">RatingBar</string>
-    <string name="question_5_answer_type">multiple</string>
-    <string name="question_5_correct_answer">1,2,4</string>
-
-
+    <string name="reset">Reset</string>
+    <string name="img_question_5_answer_1_description">Example image for question 5 answer 4</string>
 </resources>

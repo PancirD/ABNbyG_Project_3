@@ -10,21 +10,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/done"
-            android:onClick="estimate"/>
-        <Button
-            style="@style/CheckBox"
-            android:text="QuickTest"
-            android:onClick="quickTest"/>
-
         <TextView
             android:id="@+id/title"
             style="@style/Title"
-            android:text="@string/title_text"
-            android:gravity="center_horizontal" />
+            android:gravity="center_horizontal"
+            android:text="@string/title_text" />
 
         <TextView
             android:id="@+id/question0"
@@ -164,9 +154,11 @@
                 android:id="@+id/question5Answer1"
                 style="@style/CheckBox" />
 
-            <ProgressBar
+            <ImageView
                 android:id="@+id/question5Answer1Object"
-                style="@style/AnswerObject" />
+                style="@style/AnswerObject"
+                android:contentDescription="@string/img_question_5_answer_1_description"
+                android:src="@mipmap/ic_launcher" />
 
             <CheckBox
                 android:id="@+id/question5Answer2"
@@ -188,24 +180,27 @@
                 android:id="@+id/question5Answer3"
                 style="@style/CheckBox" />
 
-            <Button
+            <ProgressBar
                 android:id="@+id/question5Answer3Object"
-                style="@style/AnswerObject"
-                android:clickable="true"
-                android:text="@string/ok" />
+                style="@style/AnswerObject" />
 
             <CheckBox
                 android:id="@+id/question5Answer4"
                 style="@style/CheckBox" />
 
-            <ImageView
+            <Button
                 android:id="@+id/question5Answer4Object"
                 style="@style/AnswerObject"
-                android:contentDescription="@string/img_question_5_answer_4_description"
-                android:src="@mipmap/ic_launcher" />
+                android:clickable="true"
+                android:text="@string/ok" />
         </LinearLayout>
 
-
+        <Button
+            android:id="@+id/doneButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="getResult"
+            android:text="@string/done" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -213,12 +208,22 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/resetButton"
                 style="@style/CheckBox"
-                android:text="@string/done"/>
+                android:text="@string/reset"
+                android:onClick="resetAnswers" />
+
+            <Button
+                android:id="@+id/mailButton"
+                style="@style/CheckBox"
+                android:text="mail score"
+                android:onClick="composeEMail" />
 
             <Button
                 style="@style/CheckBox"
-                android:text="@string/done" />
+                android:onClick="quickTestNew"
+                android:text="QuickTest" />
+
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

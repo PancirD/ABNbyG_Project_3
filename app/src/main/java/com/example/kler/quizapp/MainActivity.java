@@ -1,224 +1,172 @@
 package com.example.kler.quizapp;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
-
-import java.lang.reflect.Field;
 
 public class MainActivity extends AppCompatActivity {
 
-    //Full answer_id_mask = question<1>Answer<2> where <1> - question number, <2> - answer number
-    private static final String ANSWER_ID_MASK_PART_1 = "question";
-    private static final String ANSWER_ID_MASK_PART_2 = "Answer";
-
-    // Full correct_answer_mask = question_<1>_correct_answer
-    private static final String CORRECT_ANSWER_MASK_PART_1 = "question_";
-    private static final String CORRECT_ANSWER_MASK_PART_2 = "_correct_answer";
-
-    // Full answer_type_mask = question_<1>_answer_type where <1> - question number
-    private static final String ANSWER_TYPE_MASK_PART_1 = "question_";
-    private static final String ANSWER_TYPE_MASK_PART_2 = "_answer_type";
-
-
-    private static final String ANSWER_TYPE_1 = "single";
-    private static final String ANSWER_TYPE_2 = "multiple";
-    private static final String ANSWER_TYPE_3 = "text";
-
+    final static int TEMP = R.id.question0Answer1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
+        setVisibilityAdditionalButtons(View.GONE);
+        /* TODO View.GONE in variables. Nead safe state in rotation */
     }
 
-    public void quickTest(View view) {
-        String answerTypeName = ANSWER_TYPE_MASK_PART_1 + 4 + ANSWER_TYPE_MASK_PART_2;
-        //int temp = getResId("icon", Drawable.class);
-        int temp = getResources().getIdentifier(answerTypeName, "string", getApplicationContext().getPackageName());
-        String answerTypeNameValue = getString(temp);
-        //String answerTypeText = getString(R.string.question_1_text);
-
-        int answerTypeId = 0;
-        try {
-            //int answerTypeId = getResources().getIdentifier(getAnswerTypeName(questionNumber), "string", getApplicationContext().getPackageName());
-            display("question0");
-            answerTypeId = getResources().getIdentifier("question0", "string", getApplicationContext().getPackageName());
-            display("id" + answerTypeId);
-           //return getString(answerTypeId);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            display("some error 1");
-            //return "-1";
-        }
-        try {
-            String ttemp = getString(answerTypeId);
-            display("ttemp_" + ttemp);
-            //return getString(answerTypeId);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            display("2 some error 2");
-            //return "-1";
-        }
-
-        //display(answerTypeName);
-        //display(answerTypeNameValue);
-
-    }
-
-    private static int getResId(String resName, Class<?> c) {
-
-        try {
-            Field idField = c.getDeclaredField(resName);
-            return idField.getInt(idField);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    public void estimate(View view) {
+    public void getResult(View view) {
         int score = 0;
-        for (int i = 1; i <= 5; i++) {
-            score += getPointsForQuestion(i);
+        // check right answers
+        score += getPointFromSingleCheckAnswer(R.id.question1Answer1);
+        score += getPointFromSingleCheckAnswer(R.id.question2Answer3);
+        score += getPointFromMultiCheckAnswer(
+                R.id.question3Answer1, true, R.id.question3Answer2, true,
+                R.id.question3Answer3, false, R.id.question3Answer4, true);
+        score += getPointFromTextAnswer(R.id.question4Answer1, "RatingBar");
+        score += getPointFromMultiCheckAnswer(
+                R.id.question5Answer1, false, R.id.question5Answer2, true,
+                R.id.question5Answer3, true, R.id.question5Answer4, false);
+        displayScore(score, 5);
+        /* TODO add: cant edit any answer object
+           TODO Safe Score to mail message
+          */
+    }
+
+    private int getPointFromSingleCheckAnswer(int id) {
+        RadioButton radioButton = (RadioButton) findViewById(id);
+        if (radioButton.isChecked()) {
+            return 1;
         }
-        display("Score = " + score);
-    }
-
-    private int getPointsForQuestion(int questionNumber) {
-        String answerType = getAnswerTypeValue(questionNumber);
-        //int pointForQuestion = getPointsByQuestionType(questionNumber, answerType);
-        int point = 0;
-        switch (answerType) {
-            case ANSWER_TYPE_1:
-                point = getPointSingleQuestion(questionNumber);
-                display(ANSWER_TYPE_1);
-                break;
-            case ANSWER_TYPE_2:
-                point = getPointMultipleQuestion(questionNumber, answerType);
-                display(ANSWER_TYPE_2);
-                break;
-            case ANSWER_TYPE_3:
-                point = getPointTextQuestion(questionNumber, answerType);
-                display(ANSWER_TYPE_3);
-                break;
-            default: {
-                display("Error! Unknown answer type in question " + questionNumber + "\n answerType = _" + getAnswerTypeValue(questionNumber) + "_ \n ");
-                break;
-            }
-        }
-        return point;
-    }
-
-//    private int getPointsByQuestionType(int questionNumber, String answerType) {
-//        int point = 0;
-//        switch (answerType) {
-//            case ANSWER_TYPE_1:
-//                point = getPointSingleQuestion(questionNumber);
-//                display(ANSWER_TYPE_1);
-//                break;
-//            case ANSWER_TYPE_2:
-//                point = getPointMultipleQuestion(questionNumber, answerType);
-//                display(ANSWER_TYPE_2);
-//                break;
-//            case ANSWER_TYPE_3:
-//                point = getPointTextQuestion(questionNumber, answerType);
-//                display(ANSWER_TYPE_3);
-//                break;
-//            default: {
-//                display("Error! Unknown answer type in question " + questionNumber + "\n answerType = _" + getAnswerTypeValue(questionNumber) + "_ \n ");
-//                break;
-//            }
-//        }
-//        return point;
-//    }
-
-
-    private String getCorrectAnswerName(int questionNumber) {
-        String answerTypeName = CORRECT_ANSWER_MASK_PART_1 + questionNumber + CORRECT_ANSWER_MASK_PART_2;
-        return answerTypeName;
-    }
-
-    private String getCorrectAnswerValue(int questionNumber){
-        // 1. getCorrectAnswerName by questionNumber                question_1_correct_answer
-        String correctAnswerName = getCorrectAnswerName(questionNumber);
-
-        // 2. getCorrectAnswerValue by questionNumber & correctAnswerName             "2"
-        return getStringsValueByName(correctAnswerName);
-    }
-
-    private String getCorrectAnswerObjectId (int questionNumber, String correctAnswerValue){
-        return ANSWER_ID_MASK_PART_1 + questionNumber + ANSWER_ID_MASK_PART_2 + correctAnswerValue;
-        //  question1Answer2
-    }
-    private int getPointSingleQuestion(int questionNumber){
-        int point = 0;
-        // 1. get correctAnswerValue by questionNumber                              2
-        String correctAnswerValue = getCorrectAnswerValue(questionNumber);
-
-        // 2. get correctAnswerObjectId by questionNumber & correctAnswerValue      question1Answer2        CanUseInMultiple
-        String correctAnswerObjectId = getCorrectAnswerObjectId(questionNumber, correctAnswerValue);
-
-        // 3. findById by correctAnswerObjectId                                     <Object>                CanUseInMultiple
-
-
-        // 4. if (Checked) return 1                                                                         CanUseInMultiple
-        return point;
-    }
-
-    private int getPointMultipleQuestion(int questionNumber, String answerType){
-
-        return 0;
-    }
-    private int getPointTextQuestion(int questionNumber, String answerType){
         return 0;
     }
 
-    /**
-     * Return string value from strings.xml by string name
-     */
-    private String getStringsValueByName(String stringName) {
-        try {
-            //int answerTypeId = getResources().getIdentifier(getAnswerTypeName(questionNumber), "string", getApplicationContext().getPackageName());
-            int answerTypeId = getResources().getIdentifier(stringName, "string", getApplicationContext().getPackageName());
-            return getString(answerTypeId);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "-1";
+    private int getPointFromMultiCheckAnswer(int id1, boolean checked1, int id2, boolean checked2,
+                                             int id3, boolean checked3, int id4, boolean checked4) {
+        CheckBox checkBox1 = (CheckBox) findViewById(id1);
+        CheckBox checkBox2 = (CheckBox) findViewById(id2);
+        CheckBox checkBox3 = (CheckBox) findViewById(id3);
+        CheckBox checkBox4 = (CheckBox) findViewById(id4);
+        if (checkBox1.isChecked() == checked1 && checkBox2.isChecked() == checked2 &&
+                checkBox3.isChecked() == checked3 && checkBox4.isChecked() == checked4) {
+            return 1;
         }
+        return 0;
     }
 
-    private String getAnswerTypeValue(int questionNumber) {
-        return getStringsValueByName(getAnswerTypeName(questionNumber));
-//        try {
-//            //String answerTypeNameValue = getString(getResources().getIdentifier(getAnswerTypeName(questionNumber), "string", getApplicationContext().getPackageName()));
-//            int answerTypeId = getResources().getIdentifier(getAnswerTypeName(questionNumber), "string", getApplicationContext().getPackageName());
-//            return getString(answerTypeId);
+    private int getPointFromTextAnswer(int id, String answer) {
+        EditText editText = (EditText) findViewById(id);
+        String text = editText.getText().toString();
+        if (text.equals(answer)) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private void displayScore(int score, int maxScore) {
+        String congratulationText;
+        String name = getName();
+        if (score == maxScore) {
+            congratulationText = "Congratulations, " + name + ", you are the Best! <3";
+        } else if (score == 0) {
+            congratulationText = "No one right answer, " + name + " :'( \nWould you like learn Android? ;)";
+        } else {
+            congratulationText = "Well done, " + name + ", you have " + score + " of " + maxScore + " correct answers!";
+        }
+        Toast.makeText(this, congratulationText, Toast.LENGTH_LONG).show();
+        setVisibilityAdditionalButtons(View.VISIBLE);
+    }
+
+    private String getName() {
+        EditText editText = (EditText) findViewById(R.id.question0Answer1);
+        String name = editText.getText().toString().trim();
+        if (name.equals("")) {
+            name = "Anonymous";
+        }
+        return name;
+    }
+
+    private void setVisibilityAdditionalButtons(int visibility) {
+        Button buttonReset = (Button) findViewById(R.id.resetButton);
+        buttonReset.setVisibility(visibility);
+        Button buttonMail = (Button) findViewById(R.id.mailButton);
+        buttonMail.setVisibility(visibility);
+    }
+
+    public void resetAnswers(View view) {
+        // set unChecked all RadioButtons and CheckBoxes
+        int[] checkableObject = {
+                R.id.question1Answer1, R.id.question1Answer2, R.id.question1Answer3,
+                R.id.question2Answer1, R.id.question2Answer2, R.id.question2Answer3,
+                R.id.question3Answer1, R.id.question3Answer2, R.id.question3Answer3, R.id.question3Answer4,
+                R.id.question5Answer1, R.id.question5Answer2, R.id.question5Answer3, R.id.question5Answer4};
+        for (int id : checkableObject) {
+            unCheckObjectById(id);
+        }
+        //clear text answer
+        EditText editText = (EditText) findViewById(R.id.question4Answer1);
+        editText.setText("");
+        setVisibilityAdditionalButtons(View.GONE);
+        /* TODO add: can edit any answer object  */
+    }
+
+    public void composeEMail(View view){
+        Intent eMailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
+        eMailIntent.putExtra(Intent.EXTRA_SUBJECT, getName());
+        eMailIntent.putExtra(Intent.EXTRA_TEXT, "score message");
+        if (eMailIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(Intent.createChooser(eMailIntent, "Send email..."));
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Can't send mail :(", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    /*
+* ***************************
+* **************************************************
+* **************************************************************************
+* * ************************************************************************************************
+* **************************************************************************
+* **************************************************
+* ***************************
+* */
+
+    private void clearRadioGroupById(int id) {
+        RadioGroup radioGroup = (RadioGroup) findViewById(id);
+        radioGroup.clearCheck();
+    }
+
+    public void quickTestNew(View view) {
+//        clearRadioGroupById(R.id.question1AnswersGroup);
+//        clearRadioGroupById(R.id.question2AnswersGroup);
+
+//        RadioButton radioButton = (RadioButton) findViewById(R.id.question1Answer1);
+//        radioButton.setChecked(false);
 //
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "-1";
-//        }
+//        CheckBox checkBox = (CheckBox) findViewById(R.id.question5Answer1);
+//        checkBox.setChecked(false);
+        /* TODO
+        */
     }
 
-    private String getAnswerTypeName(int questionNumber) {
-        String answerTypeName = ANSWER_TYPE_MASK_PART_1 + questionNumber + ANSWER_TYPE_MASK_PART_2;
-        return answerTypeName;
-    }
-
-    private void display(int number) {
-        Toast.makeText(this, "_" + number + "_", Toast.LENGTH_SHORT).show();
-    }
-
-    private void display(String text) {
-        Toast.makeText(this, "_" + text + "_", Toast.LENGTH_SHORT).show();
+    private void unCheckObjectById(int id) {
+        CompoundButton checkBox = (CompoundButton) findViewById(id);
+        checkBox.setChecked(false);
     }
 }
+
 
 // String to int!!!
 //        try {
