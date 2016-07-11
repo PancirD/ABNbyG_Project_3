@@ -210,20 +210,14 @@
             <Button
                 android:id="@+id/resetButton"
                 style="@style/CheckBox"
-                android:text="@string/reset"
-                android:onClick="resetAnswers" />
+                android:onClick="resetAnswers"
+                android:text="@string/reset" />
 
             <Button
                 android:id="@+id/mailButton"
                 style="@style/CheckBox"
-                android:text="mail score"
-                android:onClick="composeEMail" />
-
-            <Button
-                style="@style/CheckBox"
-                android:onClick="quickTestNew"
-                android:text="QuickTest" />
-
+                android:onClick="composeEMail"
+                android:text="@string/mail_score" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
