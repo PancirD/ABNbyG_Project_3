@@ -1,6 +1,8 @@
 package com.example.kler.quizapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,14 +17,41 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    final static int TEMP = R.id.question0Answer1;
+    final static String APP_PREFERENCES_FILE_NAME = "my_preferences";
+    final static String APP_PREFERENCES_VISIBILITY = "visibility_additional_buttons";
+    final static String APP_PREFERENCES_LAST_SCORE = "last_score";
+    final static int VISIBILITY_DEFAULT = View.GONE;
+    final static int VISIBILITY_VISIBLE = View.VISIBLE;
+    private SharedPreferences mPreferences;
+
+    private int mTempVisibility = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setVisibilityAdditionalButtons(View.GONE);
-        /* TODO View.GONE in variables. Nead safe state in rotation */
+
+        mPreferences = getSharedPreferences(APP_PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+        //int tempVisibility = mPreferences.getInt(APP_PREFERENCES_VISIBILITY, VISIBILITY_DEFAULT);
+        //mTempVisibility = mPreferences.getInt(APP_PREFERENCES_VISIBILITY, VISIBILITY_DEFAULT);
+        //display("onCreate" + mTempVisibility);
+        //setVisibilityAdditionalButtons(mTempVisibility);
+        setVisibilityAdditionalButtons(mPreferences.getInt(APP_PREFERENCES_VISIBILITY, VISIBILITY_DEFAULT));
+
+        //setVisibilityAdditionalButtons(View.GONE);
+        mTempVisibility += 100;
+    }
+
+    protected void onPause() {
+        super.onPause();
+        //mTempVisibility = getVisibilityAdditionalButtons();
+        //int tempVisibility = getVisibilityAdditionalButtons();
+        //int tempTemp = tempVisibility + mTempVisibility;
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt(APP_PREFERENCES_VISIBILITY, getVisibilityAdditionalButtons());
+        //editor.putInt(APP_PREFERENCES_VISIBILITY, mTempVisibility);
+        editor.apply();
+        mTempVisibility += 1;
     }
 
     public void getResult(View view) {
@@ -38,9 +67,8 @@ public class MainActivity extends AppCompatActivity {
                 R.id.question5Answer1, false, R.id.question5Answer2, true,
                 R.id.question5Answer3, true, R.id.question5Answer4, false);
         displayScore(score, 5);
-        /* TODO add: cant edit any answer object
-           TODO Safe Score to mail message
-          */
+        saveScoreForMail(score);
+        setVisibilityAdditionalButtons(VISIBILITY_VISIBLE);
     }
 
     private int getPointFromSingleCheckAnswer(int id) {
@@ -84,7 +112,6 @@ public class MainActivity extends AppCompatActivity {
             congratulationText = "Well done, " + name + ", you have " + score + " of " + maxScore + " correct answers!";
         }
         Toast.makeText(this, congratulationText, Toast.LENGTH_LONG).show();
-        setVisibilityAdditionalButtons(View.VISIBLE);
     }
 
     private String getName() {
@@ -96,11 +123,19 @@ public class MainActivity extends AppCompatActivity {
         return name;
     }
 
+    private int getVisibilityAdditionalButtons() {
+        Button additionalButton = (Button) findViewById(R.id.resetButton);
+        //int tempVisibility = additionalButton.getVisibility();
+        //tempVisibility = 0;
+        return additionalButton.getVisibility();
+    }
+
     private void setVisibilityAdditionalButtons(int visibility) {
-        Button buttonReset = (Button) findViewById(R.id.resetButton);
-        buttonReset.setVisibility(visibility);
-        Button buttonMail = (Button) findViewById(R.id.mailButton);
-        buttonMail.setVisibility(visibility);
+        Button additionalButton;
+        additionalButton = (Button) findViewById(R.id.resetButton);
+        additionalButton.setVisibility(visibility);
+        additionalButton = (Button) findViewById(R.id.mailButton);
+        additionalButton.setVisibility(visibility);
     }
 
     public void resetAnswers(View view) {
@@ -117,22 +152,31 @@ public class MainActivity extends AppCompatActivity {
         EditText editText = (EditText) findViewById(R.id.question4Answer1);
         editText.setText("");
         setVisibilityAdditionalButtons(View.GONE);
-        /* TODO add: can edit any answer object  */
     }
 
-    public void composeEMail(View view){
+    public void composeEMail(View view) {
+        String messageText = getScoreMessage();
+        String subjectText = "Quiz score from " + getName();
         Intent eMailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
-        eMailIntent.putExtra(Intent.EXTRA_SUBJECT, getName());
-        eMailIntent.putExtra(Intent.EXTRA_TEXT, "score message");
+        eMailIntent.putExtra(Intent.EXTRA_SUBJECT, subjectText);
+        eMailIntent.putExtra(Intent.EXTRA_TEXT, messageText);
         if (eMailIntent.resolveActivity(getPackageManager()) != null) {
             startActivity(Intent.createChooser(eMailIntent, "Send email..."));
-        }
-        else {
+        } else {
             Toast.makeText(getApplicationContext(), "Can't send mail :(", Toast.LENGTH_SHORT).show();
         }
-
     }
 
+    private String getScoreMessage(){
+        int score = mPreferences.getInt(APP_PREFERENCES_LAST_SCORE, 0);
+        return "My last score in Quiz App = " + score + "!";
+    }
+
+    private void saveScoreForMail(int score) {
+        SharedPreferences.Editor editor = mPreferences.edit();
+        editor.putInt(APP_PREFERENCES_LAST_SCORE, score);
+        editor.apply();
+    }
     /*
 * ***************************
 * **************************************************
@@ -143,12 +187,28 @@ public class MainActivity extends AppCompatActivity {
 * ***************************
 * */
 
+    private void display(String text) {
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
+    private void display(String text, int lengthLong) {
+        Toast.makeText(this, text, lengthLong).show();
+    }
+
+    private void display(int number) {
+        Toast.makeText(this, "" + number, Toast.LENGTH_LONG).show();
+    }
+
     private void clearRadioGroupById(int id) {
         RadioGroup radioGroup = (RadioGroup) findViewById(id);
         radioGroup.clearCheck();
     }
 
     public void quickTestNew(View view) {
+        //display("/*/", Toast.LENGTH_SHORT);
+        mTempVisibility += 10;
+        display("quickTestNew _" + mTempVisibility + "_");
+
 //        clearRadioGroupById(R.id.question1AnswersGroup);
 //        clearRadioGroupById(R.id.question2AnswersGroup);
 
@@ -157,8 +217,7 @@ public class MainActivity extends AppCompatActivity {
 //
 //        CheckBox checkBox = (CheckBox) findViewById(R.id.question5Answer1);
 //        checkBox.setChecked(false);
-        /* TODO
-        */
+        /* TODO Del */
     }
 
     private void unCheckObjectById(int id) {
